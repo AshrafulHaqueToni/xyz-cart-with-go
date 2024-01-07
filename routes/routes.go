@@ -1,7 +1,7 @@
 package routes
 
 import (
-	//"github.com/AshrafulHaqueToni/xyz-cart-with-go/controllers"
+	"github.com/AshrafulHaqueToni/xyz-cart-with-go/controllers"
 	"github.com/gin-gonic/gin"
 )
 
