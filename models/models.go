@@ -7,11 +7,11 @@ import (
 
 type User struct {
 	ID             primitive.ObjectID    `json:"_id" bson:"_id"`
-	FirstName      *string               `json:"firstName" validate:"required, min=2, max=30"`
-	LastName       *string               `json:"lastName" validate:"required, min=2, max=30"`
-	Password       *string               `json:"password" validate:"required, min=6"`
-	Email          *string               `json:"email" validate:"email, required"`
-	Phone          *string               `json:"phone" validate:"required"`
+	FirstName      *string               `json:"firstName" validate:"required,min=2,max=30"`
+	LastName       *string               `json:"lastName"  validate:"required,min=2,max=30"`
+	Password       *string               `json:"password"  validate:"required,min=6"`
+	Email          *string               `json:"email"     validate:"email,required"`
+	Phone          *string               `json:"phone"     validate:"required"`
 	Token          *string               `json:"token"`
 	RefreshToken   *string               `json:"refresh_token"`
 	CreatedAt      time.Time             `json:"created_at"`
@@ -23,16 +23,15 @@ type User struct {
 }
 
 type Product struct {
-	ProductID   primitive.ObjectID `json:"_id" bson:"_id"`
+	Product_ID  primitive.ObjectID `bson:"_id"`
 	ProductName *string            `json:"product_name"`
 	Price       *uint64            `json:"price"`
 	Rating      *uint8             `json:"rating"`
-	// image url
-	Image *string `json:"image"`
+	Image       *string            `json:"image"` // image url
 }
 
 type ProductSelectByUser struct {
-	ProductID   primitive.ObjectID `json:"_id" bson:"_id"`
+	Product_ID  primitive.ObjectID `bson:"_id"`
 	ProductName *string            `json:"product_name" bson:"product_name"`
 	Price       int                `json:"price" bson:"price"`
 	Rating      *uint              `json:"rating" bson:"rating"`

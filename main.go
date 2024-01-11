@@ -15,7 +15,6 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
-
 	app := controllers.NewApplication(database.ProductData(database.DBSet(), "Products"), database.UserData(database.DBSet(), "Users"))
 	router := gin.New()
 	router.Use(gin.Logger())

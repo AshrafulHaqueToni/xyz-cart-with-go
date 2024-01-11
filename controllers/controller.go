@@ -29,8 +29,8 @@ func HashPassword(password string) string {
 	return string(bytes)
 }
 
-func VerifyPassword(usersPassword string, givenPassword string) (bool, string) {
-	err := bcrypt.CompareHashAndPassword([]byte(usersPassword), []byte(givenPassword))
+func VerifyPassword(userPassword string, givenPassword string) (bool, string) {
+	err := bcrypt.CompareHashAndPassword([]byte(givenPassword), []byte(userPassword))
 	if err != nil {
 		return false, "Password is Incorrect"
 	}
@@ -52,7 +52,6 @@ func SignUp() gin.HandlerFunc {
 			return
 		}
 		count, err := database.UserData(database.DBSet(), Users).CountDocuments(ctx, bson.M{"email": user.Email})
-		defer cancel()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			log.Panic(err)
@@ -73,8 +72,8 @@ func SignUp() gin.HandlerFunc {
 		}
 		password := HashPassword(*user.Password)
 		user.Password = &password
-		user.CreatedAt, _ = time.Parse(time.RFC822, time.Now().Format(time.RFC822))
-		user.UpdatedAt, _ = time.Parse(time.RFC822, time.Now().Format(time.RFC822))
+		user.CreatedAt, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
+		user.UpdatedAt, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 		user.ID = primitive.NewObjectID()
 		user.UserID = user.ID.Hex()
 		token, refreshToken, _ := tokens.GenerateToken(*user.Email, *user.FirstName, *user.LastName, user.UserID)
@@ -132,7 +131,7 @@ func ProductViewerAdmin() gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		product.ProductID = primitive.NewObjectID()
+		product.Product_ID = primitive.NewObjectID()
 		_, err := database.ProductData(database.DBSet(), Products).InsertOne(ctx, product)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Not Created"})
@@ -191,7 +190,7 @@ func SearchProductByQuery() gin.HandlerFunc {
 		err = res.All(ctx, &searchProduct)
 		if err != nil {
 			log.Println(err)
-			c.AbortWithStatus(http.StatusInternalServerError)
+			c.IndentedJSON(http.StatusInternalServerError, "invalid")
 			return
 		}
 		defer res.Close(ctx)
